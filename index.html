@@ -29,9 +29,11 @@
 
             const ctx = myCanvas.getContext('2d')
 
+            //Check if there is a graph saved
             const graphString = localStorage.getItem('graph')
+            const graphInfo = graphString ? JSON.parse(graphString) : null
             
-            const graph = new Graph()
+            const graph = graphInfo ? Graph.load(graphInfo.points, graphInfo.segments) : new Graph()
             const viewport = new Viewport(myCanvas)
             const graphEditor = new GraphEditor(viewport, graph)
 
