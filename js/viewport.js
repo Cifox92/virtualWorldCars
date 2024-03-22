@@ -69,7 +69,7 @@ class Viewport {
         }
     }
 
-    #handleMouseUp(e) {
+    #handleMouseUp() {
         if(this.drag.active) {
             this.offset = add(this.offset, this.drag.offset)
 
