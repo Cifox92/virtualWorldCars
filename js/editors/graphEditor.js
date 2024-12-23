@@ -9,15 +9,35 @@ class GraphEditor {
         this.hovered = null
         this.dragging = false
         this.mouse = null
-        
+    }
+
+    enable() {
         this.#addEventListeners()
     }
 
+    disable() {
+        this.#removeEventListeners()
+        this.selected = false
+        this.hovered = false
+    }
+
     #addEventListeners() {
-        this.canvas.addEventListener('mousedown', this.#handleMouseDown.bind(this))
-        this.canvas.addEventListener('mousemove', this.#handleMouseMove.bind(this))
-        this.canvas.addEventListener('contextmenu', e => e.preventDefault()) //Stops right-click pop-up menu from appearing
-        this.canvas.addEventListener('mouseup', () => this.dragging = false) //Stops dragging the point
+        this.boundMouseDown = this.#handleMouseDown.bind(this)
+        this.boundMouseMove = this.#handleMouseMove.bind(this)
+        this.boundMouseUp = () => this.dragging = false
+        this.boundContextMenu = e => e.preventDefault()
+
+        this.canvas.addEventListener('mousedown', this.boundMouseDown)
+        this.canvas.addEventListener('mousemove', this.boundMouseMove)
+        this.canvas.addEventListener('mouseup', this.boundMouseUp) //Stops dragging the point
+        this.canvas.addEventListener('contextmenu', this.boundContextMenu) //Stops right-click pop-up menu from appearing
+    }
+
+    #removeEventListeners() {
+        this.canvas.removeEventListener('mousedown', this.boundMouseDown)
+        this.canvas.removeEventListener('mousemove', this.boundMouseMove)
+        this.canvas.removeEventListener('mouseup', this.boundMouseUp) //Stops dragging the point
+        this.canvas.removeEventListener('contextmenu', this.boundContextMenu) //Stops right-click pop-up menu from appearing
     }
 
     #handleMouseDown(e) {
